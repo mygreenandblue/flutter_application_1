@@ -6,147 +6,9 @@ import 'package:flutter_application_1/data_sources/company_services.dart';
 // import 'package:flutter_application_1/resources/widgets/slidable_widgets.dart';
 import 'package:flutter_application_1/views/employeeList_Screen.dart';
 import 'package:provider/provider.dart';
-
-//   @override
-//   _CompanyListScreenState createState() => _CompanyListScreenState();
-// }
-
-// class _CompanyListScreenState extends State<CompanyListScreen> {
-//   final homeService = CompanyService();
-//   late Future<List<Company>> futureCompany;
-//   List<Companys> items = [];
-//   bool _isLoading = false;
-//   late List listItems;
-//   ScrollController _scrollController = ScrollController();
-//   int _maxItems = 8;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _fetchCompanyList();
-//     listItems = List.generate(10, (i) => "Items : ${i + 1}");
-//     _scrollController.addListener(() {
-//       if (_scrollController.position.pixels ==
-//           _scrollController.position.maxScrollExtent) {
-//         _getMoreData();
-//       }
-//     });
-//   }
-
-//   _getMoreData() {
-//     for (int i = _maxItems; i < _maxItems + 10; i++) {
-//       listItems.add("Items : ${i + 1}");
-//     }
-
-//     _maxItems = _maxItems + 8;
-
-//     setState(() {});
-//   }
-
-//   void _fetchCompanyList() async {
-//     setState(() => _isLoading = true);
-
-//     setState(() => _isLoading = false);
-//     print('${items}');
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           "Company",
-//           style: TextStyle(color: Colors.black),
-//         ),
-//         backgroundColor: Colors.white,
-//       ),
-//       body: _isLoading
-//           ? Center(
-//               child: CircularProgressIndicator(),
-//             )
-//           : ListView.builder(
-//             controller: _scrollController,
-//               itemCount: items.length,
-//               itemBuilder: (context, i) {
-//                 return Container(
-//                   margin: EdgeInsets.only(top: 20.0),
-//                   decoration: BoxDecoration(
-//                     color: Colors.grey.shade100,
-//                     borderRadius: BorderRadius.circular(12),
-//                     boxShadow: [
-//                       BoxShadow(
-//                         color: Colors.grey.withOpacity(0.3),
-//                         spreadRadius: 2,
-//                         blurRadius: 4,
-//                         offset: Offset(0, 2),
-//                       ),
-//                     ],
-//                   ),
-//                   padding: EdgeInsetsDirectional.all(12.0),
-//                   child: Row(
-//                     children: [
-//                       IconButton(onPressed: null, icon: Icon(Icons.person)),
-//                       Text(
-//                         '${items[i].ResultId}',
-//                         style: TextStyle(
-//                           fontWeight: FontWeight.w500,
-//                         ),
-//                       ),
-//                       Text('${items[i].ClassA}'),
-//                     ],
-//                   ),
-//                 );
-//               },
-//             ),
-//     );
-//   }
-// }
-
-class CompanyListView extends StatelessWidget {
-  final Company company;
-  const CompanyListView({Key? key, required this.company}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "${company.ResultId}",
-            style: const TextStyle(
-                fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600),
-          ),
-          SizedBox(height: 4),
-          Text(
-            "${company.DescriptionA}",
-            style: const TextStyle(fontSize: 14, color: Colors.black),
-          ),
-          SizedBox(height: 4),
-          Text(
-            "${company.DescriptionA}",
-            style: const TextStyle(fontSize: 14, color: Colors.black),
-          ),
-        ],
-      ),
-    );
-  }
-}
+import 'package:flutter_application_1/views/companyViews/create/create_company_view.dart';
+import 'company_list.dart';
+import 'package:flutter_application_1/views/companyViews/update/company_detail.dart';
 
 class CompanyListScreen extends StatefulWidget {
   const CompanyListScreen({Key? key}) : super(key: key);
@@ -163,36 +25,93 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
   ScrollController _scrollController = ScrollController();
   int _currentMax = 6;
 
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _classController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    // Provider.of<CompanyListViewModel>(context, listen: false).getEvent();
-    // _getEvent();
-    // myList = List.generate(10, (i) => "Item : ${i + 1}");
-    // _scrollController.addListener(() {
-    //   if (_scrollController.position.pixels ==
-    //       _scrollController.position.maxScrollExtent) {
-    //     _getMoreData();
-    //   }
-    // });
+    _getEvent();
+    myList = List.generate(10, (i) => "Item : ${i + 1}");
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _getMoreData();
+      }
+    });
   }
 
-  // // _getMoreData() {
-  // //   for (int i = _currentMax; i < _currentMax + 10; i++) {
-  // //     myList.add("Item : ${i + 1}");
-  // //   }
+  _getMoreData() {
+    for (int i = _currentMax; i < _currentMax + 10; i++) {
+      myList.add("Item : ${i + 1}");
+    }
 
-  // //   _currentMax = _currentMax + 6;
+    _currentMax = _currentMax + 6;
 
-  // //   setState(() {});
-  // // }
+    setState(() {});
+  }
 
-  // void _getEvent() async {
-  //   setState(() => _isLoading = true);
-  //   homes = await homeService.fetchCompany();
-  //   setState(() => _isLoading = false);
-  //   // print('.............${homes}');
-  // }
+  void _getEvent() async {
+    setState(() => _isLoading = true);
+    homes = await homeService.fetchCompany();
+    setState(() => _isLoading = false);
+    // print('.............${homes}');
+  }
+
+  void _modelButtonAdd() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          children: [
+            TextField(
+              controller: _idController,
+              decoration: const InputDecoration(
+                labelText: '',
+                hintText: 'Customer Name',
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                ),
+                border: InputBorder.none,
+              ),
+            ),
+            TextField(
+              controller: _classController,
+              decoration: const InputDecoration(
+                labelText: 'name',
+                hintText: 'Customer Name',
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                ),
+                border: InputBorder.none,
+              ),
+            ),
+            TextField(
+              decoration: const InputDecoration(
+                labelText: 'age',
+                hintText: 'Customer Name',
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                ),
+                border: InputBorder.none,
+              ),
+              controller: _descriptionController,
+            ),
+            // RaisedButton(
+            //   child: Text('save'),
+            //   onPressed: () {
+            //     setState(() {
+            //       Navigator.of(context).pop();
+            //       _addCustomer();
+            //     });
+            //   },
+            // )
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -207,6 +126,26 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
             fontWeight: FontWeight.w600,
           ),
         ),
+        // actions: <Widget>[
+        //   GestureDetector(
+        //     onTap: () async {
+        //       var result = await Navigator.push(
+        //         context,
+        //         MaterialPageRoute(builder: (context) => AddCompanyScreen()),
+        //       );
+        //       if (result != null) {
+        //         setState(() {});
+        //       }
+        //     },
+        //     child: Padding(
+        //       padding: const EdgeInsets.only(right: 16.0),
+        //       child: Icon(
+        //         Icons.add,
+        //         color: Colors.white,
+        //       ),
+        //     ),
+        //   ),
+        // ],
       ),
 // //       body: ListView.builder(
 // //         controller: _scrollController,
@@ -240,7 +179,7 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
         controller: _scrollController,
         itemCount: homes.length,
         itemBuilder: (context, index) {
-          final item = homes[index].ClassA as String;
+          final item = homes[index].ResultId.toString();
           return Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
@@ -248,8 +187,14 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
               onTap: () => {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EmployeeListScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => CompanyDetailsScreen(),
+                    settings: RouteSettings(
+                      arguments: homes[index],
+                    ),
+                  ),
                 ),
+                // _modelButtonAdd()
               },
               child: Dismissible(
                 child: CompanyListView(company: homes[index]),
@@ -268,6 +213,7 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
                 onDismissed: (direction) {
                   // Remove the item from the data source.
                   setState(() {
+                    homeService.deleteCompany(index);
                     homes.removeAt(index);
                   });
 
@@ -306,6 +252,19 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
       ),
 //           //   Center(
       // child: Text(viewModel.title),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          var result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddCompanyScreen()),
+          );
+          if (result != null) {
+            setState(() {});
+          }
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
