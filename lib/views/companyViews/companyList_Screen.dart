@@ -24,7 +24,7 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
   late List myList;
   ScrollController _scrollController = ScrollController();
   int _currentMax = 6;
-
+  late final Company company;
   final TextEditingController _idController = TextEditingController();
   final TextEditingController _classController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -59,59 +59,59 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
     // print('.............${homes}');
   }
 
-  void _modelButtonAdd() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Column(
-          children: [
-            TextField(
-              controller: _idController,
-              decoration: const InputDecoration(
-                labelText: '',
-                hintText: 'Customer Name',
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                ),
-                border: InputBorder.none,
-              ),
-            ),
-            TextField(
-              controller: _classController,
-              decoration: const InputDecoration(
-                labelText: 'name',
-                hintText: 'Customer Name',
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                ),
-                border: InputBorder.none,
-              ),
-            ),
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'age',
-                hintText: 'Customer Name',
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                ),
-                border: InputBorder.none,
-              ),
-              controller: _descriptionController,
-            ),
-            // RaisedButton(
-            //   child: Text('save'),
-            //   onPressed: () {
-            //     setState(() {
-            //       Navigator.of(context).pop();
-            //       _addCustomer();
-            //     });
-            //   },
-            // )
-          ],
-        );
-      },
-    );
-  }
+  // void _modelButtonAdd() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (context) {
+  //       return Column(
+  //         children: [
+  //           TextField(
+  //             controller: _idController,
+  //             decoration: InputDecoration(
+  //               labelText: company!.ResultId.toString(),
+  //               hintText: 'Customer Name',
+  //               hintStyle: TextStyle(
+  //                 color: Colors.grey,
+  //               ),
+  //               border: InputBorder.none,
+  //             ),
+  //           ),
+  //           TextField(
+  //             controller: _classController,
+  //             decoration: InputDecoration(
+  //               labelText: company!.ClassA.toString(),
+  //               hintText: 'Customer Name',
+  //               hintStyle: TextStyle(
+  //                 color: Colors.grey,
+  //               ),
+  //               border: InputBorder.none,
+  //             ),
+  //           ),
+  //           TextField(
+  //             decoration: InputDecoration(
+  //               labelText: company!.DescriptionA.toString(),
+  //               hintText: 'Customer Name',
+  //               hintStyle: TextStyle(
+  //                 color: Colors.grey,
+  //               ),
+  //               border: InputBorder.none,
+  //             ),
+  //             controller: _descriptionController,
+  //           ),
+  // RaisedButton(
+  //   child: Text('save'),
+  //   onPressed: () {
+  //     setState(() {
+  //       Navigator.of(context).pop();
+  //       _addCustomer();
+  //     });
+  //   },
+  // )
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -180,73 +180,75 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
         itemCount: homes.length,
         itemBuilder: (context, index) {
           final item = homes[index].ResultId.toString();
+
           return Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
-            child: GestureDetector(
-              onTap: () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CompanyDetailsScreen(),
-                    settings: RouteSettings(
-                      arguments: homes[index],
+            child: Column(children: [
+              GestureDetector(
+                onTap: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return CompanyDetailsScreen(company: homes[index]);
+                      },
                     ),
-                  ),
-                ),
-                // _modelButtonAdd()
-              },
-              child: Dismissible(
-                child: CompanyListView(company: homes[index]),
-                // Each Dismissible must contain a Key. Keys allow Flutter to
-                // uniquely identify widgets.
-                key: Key(item),
-                // Provide a function that tells the app
-                // what to do after an item has been swiped away.
-                secondaryBackground: Container(
-                  color: Colors.red,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Icon(Icons.delete, color: Colors.white),
-                  ),
-                ),
-                onDismissed: (direction) {
-                  // Remove the item from the data source.
-                  setState(() {
-                    homeService.deleteCompany(index);
-                    homes.removeAt(index);
-                  });
-
-                  // Then show a snackbar.
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Colors.red,
-                    content: Row(
-                      children: const [
-                        Icon(
-                          CupertinoIcons.delete_solid,
-                          size: 22,
-                          color: Colors.white,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          'Successful Delete',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ));
+                  );
+                  // _modelButtonAdd()
                 },
-                // Show a red background as the item is swiped away.
-                background: Container(color: Colors.red),
-                // child: ListTile(
-                //   title: Text(item),
-                // ),
+                child: Dismissible(
+                  child: CompanyListView(company: homes[index]),
+                  // Each Dismissible must contain a Key. Keys allow Flutter to
+                  // uniquely identify widgets.
+                  key: Key(item),
+                  // Provide a function that tells the app
+                  // what to do after an item has been swiped away.
+                  secondaryBackground: Container(
+                    color: Colors.red,
+                    child: const Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Icon(Icons.delete, color: Colors.white),
+                    ),
+                  ),
+                  onDismissed: (direction) {
+                    // Remove the item from the data source.
+                    setState(() {
+                      homes.indexOf(homes[index]);
+                      homes.removeAt(index);
+                    });
+
+                    // Then show a snackbar.
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Row(
+                        children: const [
+                          Icon(
+                            CupertinoIcons.delete_solid,
+                            size: 22,
+                            color: Colors.white,
+                          ),
+                          SizedBox(width: 12),
+                          Text(
+                            'Successful Delete',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ));
+                  },
+                  // Show a red background as the item is swiped away.
+                  background: Container(color: Colors.red),
+                  // child: ListTile(
+                  //   title: Text(item),
+                  // ),
+                ),
               ),
-            ),
+            ]),
           );
         },
       ),

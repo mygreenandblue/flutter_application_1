@@ -15,13 +15,14 @@ class AddCompanyScreen extends StatefulWidget {
 
 class _FormAddScreenState extends State<AddCompanyScreen> {
   bool _isLoading = false;
-  CompanyService _companyService = CompanyService();
+  final CompanyService _companyService = CompanyService();
   bool? _isFieldResultId;
   bool? _isFieldClassA;
-  bool? _isFieldDescreptionA;
-  TextEditingController _controllerResultId = TextEditingController();
-  TextEditingController _controllerClassA = TextEditingController();
-  TextEditingController _controllerDescreptionA = TextEditingController();
+  bool? _isFieldDescriptionA;
+  final TextEditingController _controllerResultId = TextEditingController();
+  final TextEditingController _controllerClassA = TextEditingController();
+  final TextEditingController _controllerDescriptionA = TextEditingController();
+  Future<Company>? _futureCompany;
 
   @override
   void initState() {
@@ -30,8 +31,8 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
       _controllerResultId.text = widget.company!.ResultId.toString();
       _isFieldClassA = true;
       _controllerClassA.text = widget.company!.ClassA.toString();
-      _isFieldDescreptionA = true;
-      _controllerDescreptionA.text = widget.company!.DescriptionA.toString();
+      _isFieldDescriptionA = true;
+      _controllerDescriptionA.text = widget.company!.DescriptionA.toString();
     }
     super.initState();
   }
@@ -41,10 +42,10 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
     return Scaffold(
       key: _scaffoldState,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           widget.company == null ? "Form Add" : "Change Data",
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
       ),
       body: Stack(
@@ -54,8 +55,8 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                _buildTextFieldName(),
-                _buildTextFieldEmail(),
+                _buildTextFieldID(),
+                _buildTextFiel(),
                 _buildTextFieldAge(),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -64,19 +65,19 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
                       widget.company == null
                           ? "Submit".toUpperCase()
                           : "Update Data".toUpperCase(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
                     onPressed: () {
                       if (_isFieldResultId == null ||
                           _isFieldClassA == null ||
-                          _isFieldDescreptionA == null ||
+                          _isFieldDescriptionA == null ||
                           !_isFieldResultId! ||
                           !_isFieldClassA! ||
-                          !_isFieldDescreptionA!) {
+                          !_isFieldDescriptionA!) {
                         _scaffoldState.currentState!.showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text("Please fill all field"),
                           ),
                         );
@@ -86,12 +87,12 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
                       int resultID =
                           int.parse(_controllerResultId.text.toString());
                       String classA = _controllerClassA.text.toString();
-                      String descreptionA =
-                          _controllerDescreptionA.text.toString();
+                      String descriptionA =
+                          _controllerDescriptionA.text.toString();
                       Company company = Company(
                           ResultId: resultID,
                           ClassA: classA,
-                          DescriptionA: descreptionA);
+                          DescriptionA: descriptionA);
                       if (widget.company == null) {
                         _companyService
                             .createCompany(company)
@@ -101,7 +102,8 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
                             Navigator.pop(
                                 _scaffoldState.currentState!.context, true);
                           } else {
-                            _scaffoldState.currentState!.showSnackBar(SnackBar(
+                            _scaffoldState.currentState!
+                                .showSnackBar(const SnackBar(
                               content: Text("Submit data failed"),
                             ));
                           }
@@ -116,7 +118,8 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
                             Navigator.pop(
                                 _scaffoldState.currentState!.context, true);
                           } else {
-                            _scaffoldState.currentState!.showSnackBar(SnackBar(
+                            _scaffoldState.currentState!
+                                .showSnackBar(const SnackBar(
                               content: Text("Update data failed"),
                             ));
                           }
@@ -131,7 +134,7 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
           ),
           _isLoading
               ? Stack(
-                  children: <Widget>[
+                  children: const <Widget>[
                     Opacity(
                       opacity: 0.3,
                       child: ModalBarrier(
@@ -150,7 +153,7 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
     );
   }
 
-  Widget _buildTextFieldName() {
+  Widget _buildTextFieldID() {
     return TextField(
       controller: _controllerResultId,
       keyboardType: TextInputType.text,
@@ -169,7 +172,7 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
     );
   }
 
-  Widget _buildTextFieldEmail() {
+  Widget _buildTextFiel() {
     return TextField(
       controller: _controllerClassA,
       keyboardType: TextInputType.emailAddress,
@@ -190,18 +193,18 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
 
   Widget _buildTextFieldAge() {
     return TextField(
-      controller: _controllerDescreptionA,
+      controller: _controllerDescriptionA,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        labelText: "Descreption",
-        errorText: _isFieldDescreptionA == null || _isFieldDescreptionA!
+        labelText: "Description",
+        errorText: _isFieldDescriptionA == null || _isFieldDescriptionA!
             ? null
-            : "Descreption is required",
+            : "Description is required",
       ),
       onChanged: (value) {
         bool isFieldValid = value.trim().isNotEmpty;
-        if (isFieldValid != _isFieldDescreptionA) {
-          setState(() => _isFieldDescreptionA = isFieldValid);
+        if (isFieldValid != _isFieldDescriptionA) {
+          setState(() => _isFieldDescriptionA = isFieldValid);
         }
       },
     );

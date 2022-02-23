@@ -10,7 +10,7 @@ class CompanyService {
     final url = Uri.parse(ApiUrls.apiCompany);
     final resp = await http.post(
       url,
-      headers: {'Accept': 'application/json'},
+      headers: {'Cookie': 'application/json'},
       body: json.jsonEncode({'ApiKey': ApiUrls.apiKey}),
     );
     final decodedData = json.jsonDecode(resp.body);
@@ -48,7 +48,7 @@ class CompanyService {
 
   Future<bool> deleteCompany(int id) async {
     final url = Uri.parse(ApiUrls.apiCompany);
-    final resp = await http.post(
+    final resp = await http.delete(
       url,
       headers: {'Accept': 'application/json'},
       body: json.jsonEncode({'ApiKey': ApiUrls.apiKey}),

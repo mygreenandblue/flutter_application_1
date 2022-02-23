@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_application_1/views/companyViews/companyList_Screen.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         unselectedWidgetColor: Colors.blue,
       ),
-      home: CompanyListScreen(),
+      home: const CompanyListScreen(),
     );
   }
 }

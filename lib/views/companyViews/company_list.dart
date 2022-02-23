@@ -7,6 +7,7 @@ import 'package:flutter_application_1/data_sources/company_services.dart';
 import 'package:flutter_application_1/views/employeeList_Screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_application_1/views/companyViews/create/create_company_view.dart';
+import 'package:flutter_application_1/views/companyViews/companyList_Screen.dart';
 
 //   @override
 //   _CompanyListScreenState createState() => _CompanyListScreenState();
@@ -104,8 +105,8 @@ import 'package:flutter_application_1/views/companyViews/create/create_company_v
 // }
 
 class CompanyListView extends StatelessWidget {
-  final Company company;
-  const CompanyListView({Key? key, required this.company}) : super(key: key);
+  final Company? company;
+  const CompanyListView({Key? key, this.company}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -129,20 +130,21 @@ class CompanyListView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "${company.ResultId}",
+            "${company!.ResultId}",
             style: const TextStyle(
                 fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600),
           ),
           SizedBox(height: 4),
           Text(
-            "${company.ClassA}",
+            "${company!.ClassA}",
             style: const TextStyle(fontSize: 14, color: Colors.black),
           ),
           SizedBox(height: 4),
           Text(
-            "${company.DescriptionA}",
+            "${company!.DescriptionA}",
             style: const TextStyle(fontSize: 14, color: Colors.black),
           ),
+          
         ],
       ),
     );

@@ -8,7 +8,7 @@ import 'package:flutter_application_1/data_sources/company_services.dart';
 class CompanyDetailsScreen extends StatefulWidget {
   final Company? company;
 
-  CompanyDetailsScreen({this.company});
+  const CompanyDetailsScreen({Key? key, this.company}) : super(key: key);
   @override
   _VehicleDetailsScreenState createState() => _VehicleDetailsScreenState();
 }
@@ -41,7 +41,6 @@ class _VehicleDetailsScreenState extends State<CompanyDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final todo = ModalRoute.of(context)!.settings.arguments as Company;
     final homeservices = CompanyService();
 
     return Scaffold(
@@ -86,14 +85,14 @@ class _VehicleDetailsScreenState extends State<CompanyDetailsScreen> {
                           }
                           return null;
                         },
-                        controller: _descriptionController,
+                        controller: _idController,
                         onSaved: (value) {
-                          widget.company?.ResultId = value as int?;
+                          var ID = widget.company!.ResultId.toString();
+                          ID = value!;
                         },
                         decoration: InputDecoration(
-                          icon: Icon(Icons.directions_car),
                           hintText: 'Enter id',
-                          labelText: todo.ResultId.toString(),
+                          labelText: "Id",
                         ),
                         keyboardType: TextInputType.number,
                       ),
@@ -101,7 +100,7 @@ class _VehicleDetailsScreenState extends State<CompanyDetailsScreen> {
                         onSaved: (value) {
                           widget.company?.ClassA = value;
                         },
-                        controller: _idController,
+                        controller: _classController,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter class';
@@ -109,9 +108,8 @@ class _VehicleDetailsScreenState extends State<CompanyDetailsScreen> {
                           return null;
                         },
                         decoration: InputDecoration(
-                          icon: Icon(Icons.directions_car_outlined),
                           hintText: 'Enter class',
-                          labelText: todo.ClassA.toString(),
+                          labelText: "Class",
                         ),
                         keyboardType: TextInputType.text,
                       ),
@@ -122,14 +120,13 @@ class _VehicleDetailsScreenState extends State<CompanyDetailsScreen> {
                           }
                           return null;
                         },
-                        controller: _classController,
+                        controller: _descriptionController,
                         onSaved: (value) {
                           widget.company?.DescriptionA = value;
                         },
                         decoration: InputDecoration(
-                          icon: Icon(Icons.calendar_today),
                           hintText: 'Enter some text',
-                          labelText: todo.DescriptionA.toString(),
+                          labelText: "Description",
                         ),
                         keyboardType: TextInputType.text,
                       ),
@@ -164,18 +161,17 @@ class _VehicleDetailsScreenState extends State<CompanyDetailsScreen> {
                     ),
                     color: Colors.pink,
                     onPressed: () async {
+                      int ResultID = int.parse(_idController.text.toString());
+                      String ClassA = _classController.text.toString();
+                      String DescriptionA =
+                          _descriptionController.text.toString();
+                      Company company = Company(
+                          ResultId: ResultID,
+                          ClassA: ClassA,
+                          DescriptionA: DescriptionA);
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-////The method bellow updateList ()needs to be changed in order to modify the existing list, this method just creates a new one.
-                        // await updateList(Company(
-                        //   friendlyName: friendlyName.toString(),
-                        //   color: color.toString(),
-                        //   licencePlate: licencePlate.toString(),
-                        // ));
-                        await homeservices.updateCompany(Company(
-                            ResultId: todo.ResultId,
-                            DescriptionA: todo.ClassA,
-                            ClassA: todo.DescriptionA));
+                        await homeservices.updateCompany(company);
 
                         Navigator.of(context).pop();
                       }
