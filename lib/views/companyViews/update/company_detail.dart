@@ -87,8 +87,8 @@ class _VehicleDetailsScreenState extends State<CompanyDetailsScreen> {
                         },
                         controller: _idController,
                         onSaved: (value) {
-                          var ID = widget.company!.ResultId.toString();
-                          ID = value!;
+                          int ID = int.parse(value.toString());
+                          widget.company!.ResultId = ID;
                         },
                         decoration: InputDecoration(
                           hintText: 'Enter id',

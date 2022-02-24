@@ -17,7 +17,10 @@ class Company {
   String? ClassA;
   String? DescriptionA;
 
-  Company({required this.ResultId, required this.DescriptionA, required this.ClassA});
+  Company(
+      {required this.ResultId,
+      required this.DescriptionA,
+      required this.ClassA});
 
   Company.fromJson(Map<dynamic, dynamic> json) {
     ResultId = json['ResultId'];
