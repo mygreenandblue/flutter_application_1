@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/data_sources/company_services.dart';
 import 'package:flutter_application_1/models/company_model.dart';
@@ -6,8 +8,9 @@ final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
 class AddCompanyScreen extends StatefulWidget {
   final Company? company;
-
-  const AddCompanyScreen({Key? key, this.company}) : super(key: key);
+  final dynamic getEvent;
+  const AddCompanyScreen({Key? key, this.company, this.getEvent})
+      : super(key: key);
 
   @override
   _FormAddScreenState createState() => _FormAddScreenState();
@@ -83,7 +86,7 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
                         );
                         return;
                       }
-                      setState(() => _isLoading = true);
+                      // setState(() => _isLoading = true);
                       int resultID =
                           int.parse(_controllerResultId.text.toString());
                       String classA = _controllerClassA.text.toString();
@@ -94,36 +97,22 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
                           ClassA: classA,
                           DescriptionA: descriptionA);
                       if (widget.company == null) {
-                        _companyService
-                            .createCompany(company)
-                            .then((isSuccess) {
-                          setState(() => _isLoading = false);
-                          if (isSuccess) {
+                        _companyService.createCompany(company);
+                        
+                            widget.getEvent;
                             Navigator.pop(
-                                _scaffoldState.currentState!.context, true);
-                          } else {
-                            _scaffoldState.currentState!
-                                .showSnackBar(const SnackBar(
-                              content: Text("Submit data failed"),
-                            ));
-                          }
-                        });
-                      } else {
-                        company.ResultId = widget.company!.ResultId;
-                        _companyService
-                            .updateCompany(company)
-                            .then((isSuccess) {
-                          setState(() => _isLoading = false);
-                          if (isSuccess) {
-                            Navigator.pop(
-                                _scaffoldState.currentState!.context, true);
-                          } else {
-                            _scaffoldState.currentState!
-                                .showSnackBar(const SnackBar(
-                              content: Text("Update data failed"),
-                            ));
-                          }
-                        });
+                                _scaffoldState.currentState!.context);
+                        // .then(
+                        //   (isSuccess) {
+                        //     setState(() => _isLoading = true);
+                        //     Future.delayed(const Duration(seconds: 5), () {
+                        //       widget.getEvent;
+
+                        //       Navigator.pop(
+                        //           _scaffoldState.currentState!.context, true);
+                        //     });
+                        //   },
+                        // );
                       }
                     },
                     color: Colors.orange[600],
@@ -155,6 +144,7 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
 
   Widget _buildTextFieldID() {
     return TextField(
+      // enabled: false,
       controller: _controllerResultId,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(

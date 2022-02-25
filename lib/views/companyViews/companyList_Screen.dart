@@ -191,7 +191,10 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return CompanyDetailsScreen(company: homes[index]);
+                        return CompanyDetailsScreen(
+                            company: homes[index],
+                            id: homes[index].ResultId,
+                            getState: _getEvent);
                       },
                     ),
                   );
@@ -214,10 +217,11 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
                   onDismissed: (direction) {
                     // Remove the item from the data source.
                     setState(() {
-                      homes.indexOf(homes[index]);
+                      homeService.deleteCompany(homes[index].ResultId);
+
                       homes.removeAt(index);
                     });
-
+                    print(homes[index].ResultId);
                     // Then show a snackbar.
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       backgroundColor: Colors.red,
@@ -258,7 +262,8 @@ class _CompanyListScreenState extends State<CompanyListScreen> {
         onPressed: () async {
           var result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => AddCompanyScreen()),
+            MaterialPageRoute(
+                builder: (context) => AddCompanyScreen(getEvent: _getEvent)),
           );
           if (result != null) {
             setState(() {});

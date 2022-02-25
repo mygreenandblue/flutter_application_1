@@ -7,8 +7,11 @@ import 'package:flutter_application_1/data_sources/company_services.dart';
 
 class CompanyDetailsScreen extends StatefulWidget {
   final Company? company;
+  final int? id;
+  final dynamic getState;
 
-  const CompanyDetailsScreen({Key? key, this.company}) : super(key: key);
+  const CompanyDetailsScreen({Key? key, this.company, this.id, this.getState})
+      : super(key: key);
   @override
   _VehicleDetailsScreenState createState() => _VehicleDetailsScreenState();
 }
@@ -42,7 +45,6 @@ class _VehicleDetailsScreenState extends State<CompanyDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final homeservices = CompanyService();
-
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -79,6 +81,7 @@ class _VehicleDetailsScreenState extends State<CompanyDetailsScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     children: <Widget>[
                       TextFormField(
+                        enabled: false,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter id';
@@ -161,18 +164,17 @@ class _VehicleDetailsScreenState extends State<CompanyDetailsScreen> {
                     ),
                     color: Colors.pink,
                     onPressed: () async {
-                      int ResultID = int.parse(_idController.text.toString());
+                      
                       String ClassA = _classController.text.toString();
                       String DescriptionA =
                           _descriptionController.text.toString();
                       Company company = Company(
-                          ResultId: ResultID,
                           ClassA: ClassA,
                           DescriptionA: DescriptionA);
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        await homeservices.updateCompany(company);
-
+                        await homeservices.updateCompany(company, widget.id);
+                        widget.getState;
                         Navigator.of(context).pop();
                       }
                     },

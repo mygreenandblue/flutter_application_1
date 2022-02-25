@@ -134,17 +134,16 @@ class CompanyListView extends StatelessWidget {
             style: const TextStyle(
                 fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             "${company!.ClassA}",
             style: const TextStyle(fontSize: 14, color: Colors.black),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             "${company!.DescriptionA}",
             style: const TextStyle(fontSize: 14, color: Colors.black),
           ),
-          
         ],
       ),
     );
