@@ -26,6 +26,7 @@ class CompanyService {
     dynamic result = json.decode(utf8.decode(response.bodyBytes));
     List data = result['Response']['Data'];
     List<Company> items = [];
+    
     for (int i = 0; i < data.length; i++) {
       items.add(Company.fromJson(data[i]));
     }

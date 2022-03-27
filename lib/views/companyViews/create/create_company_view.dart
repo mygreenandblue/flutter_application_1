@@ -98,10 +98,9 @@ class _FormAddScreenState extends State<AddCompanyScreen> {
                           DescriptionA: descriptionA);
                       if (widget.company == null) {
                         _companyService.createCompany(company);
-                        
-                            widget.getEvent;
-                            Navigator.pop(
-                                _scaffoldState.currentState!.context);
+
+                        widget.getEvent;
+                        Navigator.pop(_scaffoldState.currentState!.context);
                         // .then(
                         //   (isSuccess) {
                         //     setState(() => _isLoading = true);

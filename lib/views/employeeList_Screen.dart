@@ -5,7 +5,7 @@ import 'package:flutter_application_1/models/employee_model.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_application_1/view_models/employee_list_view_model.dart';
 import 'package:flutter_application_1/data_sources/employee_services.dart';
-import 'package:flutter_application_1/resources/widgets/common_widgets.dart';
+import 'package:flutter_application_1/resources/widgets/slidable_widget.dart';
 
 // class CompanyListScreen extends StatefulWidget {
 //   @override
